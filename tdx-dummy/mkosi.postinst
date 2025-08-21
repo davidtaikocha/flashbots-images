@@ -18,3 +18,7 @@ ln -sf ../network-setup.service "$BUILDROOT/etc/systemd/system/sysinit.target.wa
 
 mkdir -p "$BUILDROOT/etc/systemd/system/minimal.target.wants"
 ln -sf ../dummy-tdx-dcap.service "$BUILDROOT/etc/systemd/system/minimal.target.wants/dummy-tdx-dcap.service"
+
+# Disable persistent-mount.service for tdx-dummy since it doesn't need persistent storage
+rm -f "$BUILDROOT/etc/systemd/system/minimal.target.wants/persistent-mount.service"
+ln -sf /dev/null "$BUILDROOT/etc/systemd/system/persistent-mount.service"
