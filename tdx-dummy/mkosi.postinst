@@ -5,4 +5,16 @@ set -euxo pipefail
 SERVICE_DIR="$BUILDROOT/etc/systemd/system"
 mkdir -p "$SERVICE_DIR"
 
+# Install services
 install -m 644 "tdx-dummy/dummy-tdx-dcap.service" "$SERVICE_DIR/"
+install -m 644 "tdx-dummy/network-setup.service" "$SERVICE_DIR/"
+
+# Install network setup script
+install -m 755 "tdx-dummy/network-setup.sh" "$BUILDROOT/usr/bin/"
+
+# Enable services
+mkdir -p "$BUILDROOT/etc/systemd/system/sysinit.target.wants"
+ln -sf ../network-setup.service "$BUILDROOT/etc/systemd/system/sysinit.target.wants/network-setup.service"
+
+mkdir -p "$BUILDROOT/etc/systemd/system/minimal.target.wants"
+ln -sf ../dummy-tdx-dcap.service "$BUILDROOT/etc/systemd/system/minimal.target.wants/dummy-tdx-dcap.service"
